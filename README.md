@@ -1,43 +1,46 @@
 # Google Docs Auto Preview (Chrome Extension)
 
-## What this extension does
+Automatically changes Google Docs URLs from `/edit` or `/view` to `/preview` on the first eligible open in each browser tab.
 
-When you open a Google Docs URL in `/edit` or `/view` mode, this extension changes only that mode part to `/preview`.
+## Quick Start (Clone and Load)
 
-Everything else stays the same:
-- document ID
-- query parameters (like `?tab=t.0`)
-- hash (like `#heading=h.xyz`)
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/withLinda/ChromeExt-AutoChange-GoogleDocs-URL-to-preview.git
+   cd ChromeExt-AutoChange-GoogleDocs-URL-to-preview
+   ```
+2. Open Chrome: `chrome://extensions`
+3. Turn on **Developer mode**
+4. Click **Load unpacked**
+5. Select the cloned folder (the folder that contains `manifest.json`)
+
+## URL Behavior
+
+- Only the last path segment changes: `/edit` or `/view` -> `/preview`
+- Document ID stays the same
+- Query parameters stay the same (example: `?tab=t.0`)
+- Hash stays the same (example: `#heading=h.xyz`)
 
 Example:
 
-- From: `https://docs.google.com/document/d/1jKNe-UtypLqtNF4lN-_vXP-kcWbovwrbT0oKH9rQBY0/edit?tab=t.0`
-- To: `https://docs.google.com/document/d/1jKNe-UtypLqtNF4lN-_vXP-kcWbovwrbT0oKH9rQBY0/preview?tab=t.0`
+- From: `https://docs.google.com/document/d/FILE_ID/edit?tab=t.0`
+- To: `https://docs.google.com/document/d/FILE_ID/preview?tab=t.0`
 
-## Supported URL forms
+## Supported URL Forms
 
 - `/document/d/{id}/edit|view`
 - `/document/u/{n}/d/{id}/edit|view`
 - `/document/a/{domain}/d/{id}/edit|view`
 
-## Redirect behavior (once per tab)
+## Once-Per-Tab Rule
 
-The extension redirects only on the first eligible `/edit` or `/view` URL in one browser tab.
+- Same tab: first eligible `/edit` or `/view` URL redirects to `/preview`
+- Same tab (later): no automatic redirect
+- New tab: first eligible URL redirects again
+- Already `/preview`: no redirect
 
-- Same tab: first eligible open is redirected, later eligible opens are not redirected.
-- New tab: first eligible open is redirected again.
+## Quick Verification
 
-If the first page in the tab is already `/preview`, no redirect happens at that time.
-
-## Install steps
-
-1. Open Chrome and go to `chrome://extensions`.
-2. Turn on **Developer mode**.
-3. Click **Load unpacked**.
-4. Select this folder:
-   - `/Users/linda/Documents/DEV/ChromeExt-AutoChange-GoogleDocs-URL-to-preview`
-
-## Files
-
-- `manifest.json`: Extension config (Manifest V3).
-- `content.js`: URL detection and redirect logic.
+1. Open a Docs URL ending with `/edit` and confirm it becomes `/preview`
+2. In the same tab, open another `/edit` URL and confirm it does not auto-redirect
+3. Open an `/edit` URL in a new tab and confirm it redirects to `/preview`
